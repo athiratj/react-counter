@@ -6,6 +6,7 @@ class Counter extends React.Component {
     this.state = {
       count: 10,
       isCounting: false,
+      isModalOpen: false,
     };
   }
 
@@ -34,8 +35,8 @@ class Counter extends React.Component {
     if (this.state.count <= 0) {
       this.setState({
         count: 0,
+        isModalOpen: true,
       });
-      alert("Count reached 0!");
     }
   }
   handleClickReset() {
@@ -43,14 +44,18 @@ class Counter extends React.Component {
       count: 10,
     });
   }
+  //handleClickClose method
+  handleClickClose() {
+    this.setState({ isModalOpen: false });
+  }
 
   tick() {
     if (this.state.count <= 0) {
       clearInterval(this.timerID);
-      alert("Count reached 0!");
       this.setState({
-          count: 10,
-          isCounting:false
+        count: 10,
+        isCounting: false,
+        isModalOpen: true,
       });
     } else {
       this.setState({
@@ -61,6 +66,31 @@ class Counter extends React.Component {
   }
 
   render() {
+    let modal;
+    if (this.state.isModalOpen) {
+      modal = (
+        <div className="modal">
+          <div className="modal-inner">
+            <div className="modal-header">Alert</div>
+            <div className="modal-message">
+              <p>Count reached 0!</p>
+            </div>
+            {/* onClick event */}
+            <div className="modal-close">
+              <button
+                className="modal-close-btn"
+                onClick={() => {
+                  this.handleClickClose();
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div>
         <header>
@@ -72,6 +102,7 @@ class Counter extends React.Component {
             </ul>
           </nav>
         </header>
+        {modal}
         <div class="container">
           <div class="flex-container">
             <button
